@@ -154,33 +154,11 @@ func generate(postURI string) {
 		body = append(body, paragraphs(first[1])...)
 	}
 
-	current := &data.Thread
 	parts := 1
-
-	for {
-		var next *Thread
-
-		for i := range current.Replies {
-			reply := &current.Replies[i]
-			if reply.Post.Author.DID != root.Author.DID ||
-				reply.Post.Record.Reply == nil {
-				continue
-			}
-			if reply.Post.Record.Reply.Parent.URI == current.Post.URI {
-				next = reply
-				break
-			}
-		}
-
-		if next == nil {
-			break
-		}
-
-		body = append(body, paragraphs(next.Post.Record.Text)...)
+	for _, reply := range ownReplies(&data.Thread) {
+		body = append(body, paragraphs(reply.Record.Text)...)
 		parts++
-		current = next
 	}
-
 	created, err := time.Parse(time.RFC3339Nano, root.Record.CreatedAt)
 	if err != nil {
 		log.Fatal(err)

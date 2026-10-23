@@ -13,8 +13,6 @@ import (
 	"time"
 )
 
-const postURI = "at://did:plc:plcd6wiib6ddc2dy4t4oosvw/app.bsky.feed.post/3myk2gm76rc2y"
-
 type Post struct {
 	URI    string `json:"uri"`
 	Author struct {
@@ -113,7 +111,7 @@ func paragraphs(text string) []string {
 	return result
 }
 
-func main() {
+func generate(postURI string) {
 	params := url.Values{}
 	params.Set("uri", postURI)
 	params.Set("depth", "50")
